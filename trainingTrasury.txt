@@ -1,0 +1,15 @@
+31/07/2023
+
+Development Tools
+Source code local
+Java configuration
+server(jboss)  -- run D:\jboss-eap-6.3.2\bin to standalone.bat
+App compile and build - build first  run D:\Orbikit to all.bat then serber run
+change DB connection in both local and application server  (
+application - D:\Orbikit\config_files to orbi.xml and orbiconfig.properties
+jboss - D:\jboss-eap-6.3.2\modules\system\layers\base\com\idal\configuration\main\ to orbi.xml and orbiconfig.properties
+            and  D:\jboss-eap-6.3.2\standalone\configuration -> standlone.xml)
+
+Treasury EAR file details  - D:\Orbikit\distribution\treasury.ear\lib\tryconf.jar
+Running application server
+Login application

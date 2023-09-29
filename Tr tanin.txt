@@ -1,0 +1,44 @@
+Data base change path and file name:-------Local machine---
+
+	Path: D:\jboss-eap-6.3.2\standalone\configuration
+		File name:(standalone.xml)->Search by-datasources
+
+	Path: D:\jboss-eap-6.3.2\modules\system\layers\base\com\idal\configuration\main
+		File name: (ORBI.xml)->Search by(DatabaseConfig)
+				   (ORBIConfig.propertie)->Search by(DBUSER)
+	Path: D:\Orbikit\config_files
+		File name: (ORBI.xml)->Search by(DatabaseConfig)
+				   (ORBIConfig.properties)->Search by(DBUSER)
+--------------------------------------------------------------------
+Built file Antscripts: java version check is most importent(jdk1.7.0_79) 64 bits
+	
+	Path: D:\Orbikit
+		File name: (antscripts)
+					[In (AppClassesCompile.xml)->Search by(executable)]
+										
+--------------------------------------------------------------------
+IF Built Fail: Error Finding
+		When buit runing(all.bat) then open two file in note pad
+		1.ProductCompile.log[Error Finding this file ->Search by(^)]
+		2.ProductJarZip.log
+--------------------------------------------------------------------
+Buit Circle->>
+		Code write in (Orbikit)->compile->[(orbikit->all.bat) file run]-> (antscripts) make a built file 
+		and transfer the buit file to the server(jboss/weblogic)->server run standalone file (standalone.bat)
+		for aplet open -> aplet call htmls file -> j boss convert the built file html for aplet excuteable.
+--------------------------------------------------------------------
+EOD/SOD Job Finding: 
+
+EOD/SOD Server and Local:
+ D:\Orbikit\config_files == D:\jboss-eap-6.3.2\modules\system\layers\base\com\idal\configuration\main
+Contain same file this two file location.just differ only 
+	->D:\Orbikit\config_files\META-INF\spring\batch\jobs
+	Here have 3 file sod, eod, job
+
+If sod problem:-> open sod xml file->match step id= name-> copy corrosponding referance number-> 
+	then search By-ref numer-> find value number corrosponding ref number.
+	goto->D:\Orbikit\config_files->(BatchConfig.properties)->Search by value number
+	->file pakage or sp name-> goto plsql(For Debuging)->pest pakage or sp-> right click ->view spec & body 
+	->select sp name by left side-> right click->test -> input value or parameter.
+	
+If EOD problem:->open eod xml file->.... same as sod

@@ -1,0 +1,80 @@
+Orbikit Development file:
+
+Find Menu, Sub_menu, All Menu ->
+ Level here(Orbikit -> config_files -> ORBIMenuLabels.properties) collect the label name here add root file.
+ Menu Root (Orbikit -> config_files -> ORBIMenuInfo.properties) search here by the label name.
+	If (labal name).ParentId = ROOT [That means it's upper level]
+	If Find any Menu then search by it's [(labal name).ParentId]
+
+Find Menu URL:
+	Search this location (Orbikit -> config_files -> ORBIMenuInfo.properties) By [(labal name).URL]
+	Find here URL= calling javascript jar file and pass 2 argument( jsp class , name)
+	Now Search by (class.JSP) now file the jsp class. then Jsp class call Applet  
+--------------------------------------------------------------------------------
+
+Example Find FIS Menu -> FontOffice -> Security Maintence :	
+Find labal tag name ->(Orbikit -> config_files -> ORBIMenuLabels.properties) Search By (Front Office) -> find tag name mnuFISFO
+	(mnuFISFO = Front Office)-> Find Root (Orbikit -> config_files -> ORBIMenuInfo.properties) Search by tag name(mnuFISFO.parentId)
+	to find root. AND Search (mnuFISFO.URL) to find the next http site.(FISFrontOfficeLoader.jsp) search by this and find jsp page 
+	location(Orbikit->tmp->src->DefaultWebApp->FISFrontOfficeLoader.jsp) -> now find applet location from this file
+	(Orbikit->com->orbitreasury->fixedincome->presentation->applet->FISOffice.java) this file contain some heading now find the Heading name
+	(Security Maintenance)[setSecurityMaintFrame(new JFrame("Security Maintenance")); means add header in fis front office] if click this
+	heder open new windows now find the windows detains -> Search by (SecurityMaintenanceFrame) then open new class this is the Security 
+	Maintenance windows (Orbikit->src->com->orbitreasury->fixedincome->presentation->applet->SecurityMaintenanceFrame.java) here show the SUB_MENU
+	of Security Maintenance now find the (Security sub_menu) Search By ().......
+	
+
+
+--------------------------------------------------------------------------------
+Event handle file:
+	Orbikit->config_files->EventConfig.xml
+
+DB Query file:
+	Orbikit->config_files->TresQueryConfig.xml
+
+--------------------------
+issue: when create a security cashflow then creat a event 
+	(GenerateCashflowsEvent)
+
+step 01: open -> Event handle file: [orbikit->config_files->EventConfig.xml] -> search by event name(GenerateCashflowsEvent)
+	->find class file(<class>com.orbitreasury.fixedincome.eventhandler.GenerateCashflowsEvent</class>) go to this class path.
+	->open this class(GenerateCashflowsEvent) now read and analysic this class line by line.
+----------------------------------------------------------------------------	
+Create	security all step:
+----------------------------------
+open security maintance page and input data-> after click generate cashflow-> action a event(GenerateCashflowsEvent) that post
+ in consol page-> Search by event name in Event handle file: [orbikit->config_files->EventConfig.xml]-> go to class file
+ (<class>com.orbitreasury.fixedincome.eventhandler.GenerateCashflowsEvent</class>) here call this method
+   [public PageWrapper processEvent()]->in this method call Security Object before calling generate cashflows
+	 [Security sec = (Security) pWrapper.getObject();]= [Orbikit/src/com/orbitreasury/fixedincome/businessimplementation/entity/Security.java
+	   this is entity class of security ->pageWrapper(input data store in object pageWrapper by entity class)
+   after this cpnflows object call from couponflows class
+   [CouponFlows cpnFlows = new CouponFlows(dbCon);] = [Orbikit/src/com/orbitreasury/fixedincome/businessimplementation/CouponFlows.java]
+     in this class [public void generateCashFlow(Security sec)] this method create cashflow inside java runtime environment.
+Generation class flow done and it's show in cashflow menu no data insert in database.
+
+Now click (save&auth) this fire another event this is = [SAVE_SECURITY]
+	Search by event name in Event handle file: [orbikit->config_files->EventConfig.xml]-> go to class file
+	<class>com.orbitreasury.fixedincome.eventhandler.InsertSecurityEvent</class>  here call this method
+    [public PageWrapper processEvent()]->in this method call Security Object 
+	  [Security sec = (Security) pWrapper.getObject();]= [Orbikit/src/com/orbitreasury/fixedincome/businessimplementation/entity/Security.java
+	    in this method call Security Object with pageWrapper(input data store in object pageWrapper by entity class) then call
+	  [mntSecurity.authorizedAdd(param1, param2);]  mntSecurity is a objcet of mntSecurity class now call this method (authorizedAdd)
+	   [Orbikit/src/com/orbitreasury/fixedincome/businessimplementation/entity/MntSecurity.java]
+		[public void authorizedAdd(java.util.Hashtable pParam1, java.util.Hashtable pParam2)] here 
+				[this.insertRecord(pParam1, pParam2);] call InserRecord method in this same class. Inside this method
+		[private void insertRecord(java.util.Hashtable pParam1, java.util.Hashtable pParam2) ]
+				[lPreStatement = lConnection.prepareStatement(ServerCacher.getInstance().getQueryString("SAVE_AUTH_TB_FIS_SECURITY_SECURITY"));]
+				inside this method call getQueryString (SAVE_AUTH_TB_FIS_SECURITY_SECURITY) now search this string
+				
+[Orbikit->config_files->TresQueryConfig.xml] -> here find the full qurey.
+
+				lPreStatement = lConnection.prepareStatement(ServerCacher.getInstance().getQueryString("SAVE_AUTH_SECURITY_TB_FIS_SECU_MIS"));
+				commonMethodForSettingSecurityCashflowValues(numTokens, FISConstants.ACT_SAVE_AUTH, str, lPreStatement, 1);
+					Here call the method[commonMethodForSettingSecurityCashflowValues] this method insert cashflow
+				private void commonMethodForSettingSecurityCashflowValues(int numTokens, String SecurityFlow, ............
+				 lPreStatement = dbConn.getPreparedStatement(ServerCacher.getInstance().getQueryString("SAVE_AUTH_SECURITY_TB_FIS_SECU_CASHFLOWS"));
+
+----------------------------------------
+
+	   
